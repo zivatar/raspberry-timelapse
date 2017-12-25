@@ -45,7 +45,6 @@ vcodec=mpeg4:mbd=2:trell:autoaspect:vqscale=3 \
 mf://@../frames.txt -o ../${dir##*/}.avi
   cd ..
   rm frames.txt
-  exit
 done
 cd ..
 fi
