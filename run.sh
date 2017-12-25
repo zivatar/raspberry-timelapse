@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-DOWNLOAD_IMAGES=1
-SORT_IMAGES=0
-CREATE_VIDEO=0
+DOWNLOAD_IMAGES=0
+SORT_IMAGES=1
+CREATE_VIDEO=1
 UPLOAD_VIDEO=0
 CLEAN_LOCAL=0
 CLEAN_FTP=0
@@ -15,12 +15,13 @@ if [ ${DOWNLOAD_IMAGES} -eq 1 ]
 then
 cd images
 echo Download files from ${ftp_host}...
-ftp -inv ${ftp_host} << EOF
-    user ${ftp_user} ${ftp_pw}
-    cd images
-    mget *
-    bye
-EOF
+#ftp -inv ${ftp_host} << EOF
+#    user ${ftp_user} ${ftp_pw}
+#    cd images
+#    mget *201712*
+#    bye
+#EOF
+wget --user=${ftp_user} --password=${ftp_pw} ftp://${ftp_host}/images/*
 cd ..
 fi
 
@@ -48,7 +49,8 @@ for dir in ./*; do
 vcodec=mpeg4:mbd=2:trell:autoaspect:vqscale=3 \
 -vf scale=1920:1080 -mf type=jpeg:fps=20 \
 mf://@../frames.txt -o ../${dir##*/}.avi
-
+  cd ..
+  rm frames.txt
 done
 cd ..
 fi
