@@ -3,14 +3,16 @@ DOWNLOAD_IMAGES=0
 SORT_IMAGES=1
 CREATE_VIDEO=1
 UPLOAD_VIDEO=0
-CLEAN_LOCAL=0
 CLEAN_FTP=0
 
 . config.cfg
 
 mkdir -p ${images_dir_abs_path}
+rm -fr ${images_dir_abs_path}/*
 mkdir -p ${sorted_images_dir_abs_path}
+rm -fr ${sorted_images_dir_abs_path}/*
 mkdir -p ${video_dir_abs_path}
+rm -fr ${video_dir_abs_path}/*
 
 ROOT_DIR=$PWD
 
