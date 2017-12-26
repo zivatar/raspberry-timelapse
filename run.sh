@@ -2,7 +2,7 @@
 DOWNLOAD_IMAGES=0
 SORT_IMAGES=0
 CREATE_VIDEO=0
-UPLOAD_VIDEO=1
+UPLOAD_VIDEO=0
 CLEAN_FTP=1
 UPLOAD_BACKUP_VIDEOS=1
 
@@ -92,7 +92,7 @@ if [ ${CLEAN_FTP} -eq 1 ]
 then
     echo Delete images from FTP...
     cd ${images_dir_abs_path}
-    for dir in `ls -1 *avi`
+    for dir in `ls -1 *jpg`
     do
         curl ftp://${ftp_host}/images/ -X 'DELE ${dir##*/}' --user ${ftp_user}:${ftp_pw}
     done
@@ -102,13 +102,13 @@ if [ ${UPLOAD_BACKUP_VIDEOS} -eq 1 ]
 then
 echo Delete images from FTP...
 cd ${video_dir_abs_path}
-    for file in `ls -1 *avi`
-    do
-    ftp -inv ${ftp_host} << EOF
-        user ${ftp_user} ${ftp_pw}
-        cd videos
-        put ${file##*/}
-        bye
-    done
+for file in `ls -1 *avi`
+do
+ftp -inv ${ftp_host} << EOF
+user ${ftp_user} ${ftp_pw}
+cd videos
+put ${file##*/}
+bye
 EOF
+done
 fi
