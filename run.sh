@@ -19,7 +19,7 @@ function check_error {
     then
         echo Process failed
         echo $?
-        python ${ROOT_DIR}/email.py
+        python ${ROOT_DIR}/email-alert.py
         exit 1
     fi
 }
