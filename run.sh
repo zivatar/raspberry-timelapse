@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-DOWNLOAD_IMAGES=0
+DOWNLOAD_IMAGES=1
 SORT_IMAGES=1
 CREATE_VIDEO=1
-UPLOAD_VIDEO=0
-CLEAN_FTP=0
+UPLOAD_VIDEO=1
+CLEAN_FTP=1
+UPLOAD_BACKUP_VIDEOS=1
 
 . config.cfg
 
@@ -85,4 +86,27 @@ then
     done
 fi
 
+if [ ${CLEAN_FTP} -eq 1 ]
+then
+    echo Delete images from FTP...
+    cd ${images_dir_abs_path}
+    for dir in `ls -1 *avi`
+    do
+        curl ftp://${ftp_host}/images/ -X 'DELE ${dir##*/}' --user ${ftp_user}:${ftp_pw}
+    done
+fi
 
+if [ ${UPLOAD_BACKUP_VIDEOS} -eq 1 ]
+then
+echo Delete images from FTP...
+cd ${video_dir_abs_path}
+    for file in `ls -1 *avi`
+    do
+    ftp -inv ${ftp_host} << EOF
+        user ${ftp_user} ${ftp_pw}
+        cd videos
+        put ${file##*/}
+        bye
+    done
+EOF
+fi
