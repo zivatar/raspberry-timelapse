@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-DOWNLOAD_IMAGES=1
-SORT_IMAGES=1
-CREATE_VIDEO=1
+DOWNLOAD_IMAGES=0
+SORT_IMAGES=0
+CREATE_VIDEO=0
 UPLOAD_VIDEO=1
 CLEAN_FTP=1
 UPLOAD_BACKUP_VIDEOS=1
@@ -9,11 +9,11 @@ UPLOAD_BACKUP_VIDEOS=1
 . config.cfg
 
 mkdir -p ${images_dir_abs_path}
-rm -fr ${images_dir_abs_path}/*
+#rm -fr ${images_dir_abs_path}/*
 mkdir -p ${sorted_images_dir_abs_path}
-rm -fr ${sorted_images_dir_abs_path}/*
+#rm -fr ${sorted_images_dir_abs_path}/*
 mkdir -p ${video_dir_abs_path}
-rm -fr ${video_dir_abs_path}/*
+#rm -fr ${video_dir_abs_path}/*
 
 ROOT_DIR=$PWD
 
@@ -78,10 +78,12 @@ then
     cd ${video_dir_abs_path}
     for dir in `ls -1 *avi`
     do
+        cd ${ROOT_DIR}
         DAY="$(echo ${dir##*/} | cut -d'.' -f1)"
         DAY_DELIMITED="$(echo $DAY | cut -c1-4).$(echo $DAY | cut -c5-6).$(echo $DAY | cut -c7-8)."
-        python upload.py --file=${sorted_images_dir_abs_path}"/${dir##*/}" \
+        python ${ROOT_DIR}/upload.py --file=${video_dir_abs_path}"/${dir##*/}" \
   --title="${DAY_DELIMITED}" --description="Időjárás ${DAY_DELIMITED}"
+        cd ${video_dir_abs_path}
         check_error
     done
 fi
