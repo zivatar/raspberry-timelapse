@@ -3,7 +3,7 @@ DOWNLOAD_IMAGES=0
 SORT_IMAGES=0
 CREATE_VIDEO=0
 UPLOAD_VIDEO=0
-CLEAN_FTP=1
+CLEAN_FTP=0
 UPLOAD_BACKUP_VIDEOS=1
 
 . config.cfg
@@ -91,10 +91,15 @@ fi
 if [ ${CLEAN_FTP} -eq 1 ]
 then
     echo Delete images from FTP...
-    cd ${images_dir_abs_path}
-    for dir in `ls -1 *jpg`
+    cd ${sorted_images_dir_abs_path}
+    for dir in `ls -1`
     do
-        curl ftp://${ftp_host}/images/ -X 'DELE ${dir##*/}' --user ${ftp_user}:${ftp_pw}
+    ftp -inv ${ftp_host} << EOF
+user ${ftp_user} ${ftp_pw}
+cd images
+mdelete *${dir##*/}*
+bye
+EOF
     done
 fi
 
